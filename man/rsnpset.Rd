@@ -2,7 +2,7 @@
 \alias{rsnpset}
 \title{RSNPset Analysis Function}
 \description{
-    Compute the efficient score (Binomial, Gaussian, or Cox) in genome-wide SNP set analysis with binary, uncensored quantitative, or right-censored time-to-event traits.
+    Compute the efficient score (binomial, Gaussian, or Cox) for genome-wide SNP set analysis with binary, uncensored quantitative, or right-censored time-to-event traits.
 }
 \usage{
     rsnpset(Y, delta = NULL, G, X = NULL, snp.sets, 
@@ -13,17 +13,17 @@
 }
 
 \arguments{
-	\item{Y}{Vector of outcomes. Can be binary, continuous, or non-negative (time-to-event), suggesting the type of score to request in argument \code{score}. Required.}
-	\item{delta}{Vector of event indicators for survival outcomes. Must be binary: value of 1 indicates event, 0 indicates censored. Required when \code{score = "cox"}, unused otherwise.}
+	\item{Y}{Vector of outcomes. Can be binary, continuous, or non-negative (time-to-event), dictating the type of score to request in argument \code{score}. Required.}
+	\item{delta}{Vector of event indicators for survival outcomes. Must be binary: 1 indicates event, 0 indicates censored. Required when \code{score = "cox"}, unused otherwise.}
 	\item{G}{Matrix of SNP allele counts or expression levels. One row per patient and one column per SNP. Must be type \code{double}. Required.}
 	\item{X}{Placeholder argument for future covariate analysis functionality. Not currently implemented.}
 	\item{snp.sets}{List of sets of SNPs to be analyzed together. Each element should be a vector of values (usually rsIDs) corresponding to names of columns of \code{G}. Required.}
 	\item{score}{Score statistic to be calculated. (Must be appropriate for the type of outcome given in \code{Y}). Required to be one of \code{c("cox", "binomial", "gaussian")}.}
 	\item{B}{Number of permutation sets used when \code{r.method = "permutation"} to calculate the empirical distribution of the score statistics and empirical p-values. Default is 0 (no permutations will be generated).}
 	\item{r.method}{Resampling method. Currently, only the default of \code{"permutation"} is implemented.}
-	\item{v.method}{Method for calculating the variance of the score statistic. Default is \code{"empirical"} for all values of \code{score}. \code{score = "binomial"} also allows \code{"asymptotic"}.}
+	\item{v.method}{Method for calculating the variance of the score statistic. Default is \code{"empirical"} for all values of \code{score}, and is only method currently implemented for \code{score = "cox"} or \code{"gaussian"}. \code{score = "binomial"} also allows \code{"asymptotic"}.}
 	\item{v.permute}{Placeholder argument for future functionality. Boolean indicating whether or not to recalculate the variance of the score statistics for each permutation replicate. If \code{FALSE}, variance matrices are computed only for the observed data and then reused for the permutation replicates. Currently, only the default of \code{TRUE} is implemented.}
-	\item{ret.rank}{Boolean indicating whether or not to return the rank of the variance matrices for permutation replicates. Default is \code{FALSE}.}
+	\item{ret.rank}{Boolean indicating whether or not to return the rank of the variance matrices for the permutation replicates. Default is \code{FALSE}.}
 	\item{pinv.check}{Boolean. If \code{TRUE}, the function returns several diagnositc measures of the Penrose-Moore inverse of the variance matrices (see below). Default is \code{FALSE}.}
 	\item{pinv.method}{Method for calculating the inverse of the variance matrices. Currently, only the default of \code{"specdecomp"} is implemented.}
 	\item{pinv.tol}{Number indicating the tolerance for determining the rank of the variance matrix (see below). Default is \code{7.8e-8}.}

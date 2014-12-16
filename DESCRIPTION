@@ -1,11 +1,11 @@
 Package: RSNPset
 Type: Package
-Title: RSNPset
-Version: 0.2
-Date: 2014-06-10
+Title: Efficient Score Statistics For Genome-Wide SNP Set Analysis
+Version: 0.3
+Date: 2014-12-16
 Author: Chanhee Yi, Alexander Sibley, and Kouros Owzar
-Maintainer: Chanhee Yi <chanhee.yi@dm.duke.edu>
-Description: RSNPset is a software implementation of the use of efficient score statistics
+Maintainer: Alexander Sibley <alexander.sibley@dm.duke.edu>
+Description: RSNPset is an implementation of the use of efficient score statistics
   in genome-wide SNP set analysis with complex traits. The package provides three standard
   score statistics (Cox, Binomial, and Gaussian) but is easily extensible to include
   others. Code implementing the inferential procedure is primarily written in C++ and
@@ -17,7 +17,7 @@ Imports: fastmatch (>= 1.0-4), foreach (>= 1.4.1), doRNG (>= 1.5.3),
 LinkingTo: Rcpp, RcppEigen
 Suggests: knitr
 VignetteBuilder: knitr
-Packaged: 2014-06-10 17:54:50 UTC; cy77
+Packaged: 2014-12-16 19:06:52 UTC; abs33
 NeedsCompilation: yes
 Repository: CRAN
-Date/Publication: 2014-06-10 22:12:03
+Date/Publication: 2014-12-17 01:59:36

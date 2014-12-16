@@ -2,16 +2,16 @@
 \alias{RSNPset-package}
 \alias{RSNPset}
 \docType{package}
-\title{The RSNPset Package}
+\title{Efficient Score Statistics For Genome-Wide SNP Set Analysis}
 \description{
-    RSNPset is a software implementation of the use of efficient score statistics in genome-wide SNP set analysis with complex traits. 
+    RSNPset is an implementation of the use of efficient score statistics in genome-wide SNP set analysis with complex traits. 
 }
 \details{
 \tabular{ll}{
 Package: \tab RSNPset\cr
 Type: \tab Package\cr
-Version: \tab 0.2\cr
-Date: \tab 2014-06-10\cr
+Version: \tab 0.3\cr
+Date: \tab 2014-12-16\cr
 License: \tab GPL-3\cr
 }
 
@@ -20,7 +20,7 @@ This package is designed for the analysis of sets of related SNPs, using genes a
 \author{
 Chanhee Yi, Alexander Sibley, and Kouros Owzar
 
-Maintainer: Chanhee Yi <chanhee.yi@dm.duke.edu>
+Maintainer: Alexander Sibley <alexander.sibley@dm.duke.edu>
 }
 \note{
 The \emph{C++} code implementing the inferential procedures utilizes linear algebra routines from the \pkg{Eigen} library. This implementation is facilitated using the templates provided by the \pkg{Rcpp} and \pkg{RcppEigen} extension packages. Parallelization and reproducibility of the analysis is enabled by using the \pkg{doRNG} package in concert with the \pkg{foreach} package. The FDR-adjusted p-values are obtained using the \pkg{qvalue} package.

@@ -19,7 +19,7 @@ See below.
 }
 
 \value{
-An S3 class \code{RSNPset.pvalue} object that extends \code{data.frame}, with one row for each of the \code{K} SNP sets in the results for \code{rsnpset()}, columns \code{W, rank, m,} and two or more additional columns of p-values. Two columns, \code{p,} and \code{Q} are always returned. If \code{rsnpset()} was run with \code{B > 0}, the columns \code{pB} and \code{QB} are included as well. If \code{pval.transform = TRUE}, the returned p-value columns will be \code{p, pB, PB, Q,} and \code{QB}. 
+An S3 class \code{RSNPset.pvalue} object that extends \code{data.frame}, with one row for each of the \code{K} SNP sets in the results from \code{rsnpset()}, columns \code{W, rank, m,} and two or more additional columns of p-values. Two columns, \code{p,} and \code{Q} are always returned. If \code{rsnpset()} was run with \code{B > 0}, the columns \code{pB} and \code{QB} are included as well. If \code{pval.transform = TRUE}, the returned p-value columns will be \code{p, pB, PB, Q,} and \code{QB}. 
     
 \tabular{ll}{
 \bold{Column} \tab \bold{Definition} \cr
