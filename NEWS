@@ -1,0 +1,13 @@
+RSNPset v0.4 (Release date: 2015-02-11)
+============
+* Addition of NEWS file
+* Implementation of argument X (covariates) in rsnpset() for score="gaussian"
+* New option/default for rsnpset() argument r.method="monte carlo"
+* New default for rsnpset() argument v.permute="FALSE"
+* New attribute for RSNPset S3 objects: "r.method", now expected by summary.RSNPset()
+* Elements of results list for RSNPset S3 objects renamed to "Observed", "Replication.1", "Replication.2", ... 
+* Argument pval.transform=TRUE now allowed in rspset.pvalue() for rsnpset() results with return.rank=FALSE
+
+RSNPset v0.3 (Release date: 2014-12-16)
+============
+* Change of Maintainer

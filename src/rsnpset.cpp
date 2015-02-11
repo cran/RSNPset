@@ -2,7 +2,7 @@
 using namespace Rcpp;
 using namespace Eigen;
 
-MatrixXd getU(const VectorXd& Y, const VectorXd& delta, const MatrixXd& G,const std::string& score) {
+MatrixXd getU(const VectorXd& Y, const VectorXd& delta, const MatrixXd& G, const MatrixXd& X, const std::string& score) {
     if(score=="cox") {
         const int n = Y.rows();
         MatrixXd YY   = Y.rowwise().replicate(n);
@@ -13,11 +13,17 @@ MatrixXd getU(const VectorXd& Y, const VectorXd& delta, const MatrixXd& G,const 
         MatrixXd U = G-(vecYsum.cwiseInverse().asDiagonal()*matA);
         return delta.asDiagonal()*U;
     }
-    else { // else if(score=="binomial") { // else if(score=="gaussian") {
+    else if(score=="binomial" || ( (score=="gaussian")&&(X.rows()==0) )) {
         VectorXd Ytilde = Y.array() - Y.mean();
         MatrixXd Gtilde = G-G.colwise().mean().colwise().replicate(G.rows());
         return Ytilde.asDiagonal()*Gtilde;
     }
+	else { // if((score=="gaussian")&&(X.rows()!=0))  {
+        MatrixXd M = (X.transpose()*X).inverse();
+        MatrixXd alpha = M * X.transpose() * Y;
+		MatrixXd Z = G.transpose() * X;
+        return ((Y-X*alpha).asDiagonal())*(G.transpose()-((Z*M)*(X.transpose()))).transpose();
+	}
 }
 
 MatrixXd submatcols(const MatrixXd& m, const ArrayXi& idx ) {
@@ -28,22 +34,32 @@ MatrixXd submatcols(const MatrixXd& m, const ArrayXi& idx ) {
     return subm;
 }
 
+VectorXd subvector(const VectorXd& v, const ArrayXi& idx ) {
+    VectorXd subv(idx.size());
+    for(int i=0;i<idx.size();i++) {
+        subv(i)=v(idx(i));
+    }
+    return subv;
+}
+
 inline int randWrapper(const int n) { return floor(unif_rand()*n); }
 
-RcppExport SEXP rsnpsetRcpp (const SEXP Y_, const SEXP delta_, const SEXP G_, const SEXP geneIdxSets_, 
-                             const SEXP permutation_, const SEXP score_, const SEXP vMethod_, 
-                             const SEXP pinvCheck_, const SEXP tolerance_) {
+RcppExport SEXP rsnpsetRcpp (const SEXP Y_, const SEXP delta_, const SEXP G_, const SEXP X_, 
+                             const SEXP geneIdxSets_, const SEXP B_, const SEXP score_, 
+							 const SEXP vMethod_, const SEXP rMethod_, const SEXP pinvCheck_, const SEXP tolerance_) {
     std::string score = as<std::string>(score_); 
     std::string vMethod   = as<std::string>(vMethod_); 
+    std::string rMethod   = as<std::string>(rMethod_); 
     double tolerance = as<double>(tolerance_); 
-    bool permutation = as<bool>(permutation_); 
+    bool B = as<bool>(B_); 
     bool pinvCheck   = as<bool>(pinvCheck_); 
     const Map<VectorXd> Y    (as<Map<VectorXd> >(Y_));
     const Map<VectorXd> delta(as<Map<VectorXd> >(delta_));
     const Map<MatrixXd> G    (as<Map<MatrixXd> >(G_));
+    const Map<MatrixXd> X    (as<Map<MatrixXd> >(X_));
 
     MatrixXd U;
-    if(permutation==true) {
+    if(B==true && rMethod!="monte carlo") {
         RNGScope scope;
         int n = Y.size();
         PermutationMatrix<Dynamic,Dynamic> perm(n);
@@ -51,11 +67,15 @@ RcppExport SEXP rsnpsetRcpp (const SEXP Y_, const SEXP delta_, const SEXP G_, co
         std::random_shuffle(perm.indices().data(), perm.indices().data()+perm.indices().size(),randWrapper);
         VectorXd Yperm     = perm * Y;
         VectorXd deltaPerm = perm * delta;
-        U = getU(Yperm,deltaPerm,G,score);
+        U = getU(Yperm,deltaPerm,G,X,score);
     }
     else{
-        U = getU(Y,delta,G,score);
+        U = getU(Y,delta,G,X,score);
     }
+
+    const int n = Y.rows();
+	NumericVector Zvec_ = rnorm(n);
+	Map<VectorXd> Zvec = as<Map<Eigen::VectorXd> >(Zvec_);
     
     List geneIdxSets(geneIdxSets_);
     const int geneSetNum = geneIdxSets.size();
@@ -71,7 +91,8 @@ RcppExport SEXP rsnpsetRcpp (const SEXP Y_, const SEXP delta_, const SEXP G_, co
     double muhat = Y.sum()/Y.size();
     double muhatpq = muhat*(1-muhat);
     MatrixXd centeredG = G - (MatrixXd::Ones(G.rows(),1) * G.colwise().mean() ) ;
-    
+
+
     for(int i=0;i<geneSetNum;i++) {     
         ArrayXi geneSet = (as<Map<ArrayXi> >(geneIdxSets[i]))-1; // idx diff betw R & C
         
@@ -99,11 +120,20 @@ RcppExport SEXP rsnpsetRcpp (const SEXP Y_, const SEXP delta_, const SEXP G_, co
         MatrixXd Dpinv((1/evalsp).matrix().asDiagonal());
         MatrixXd VPM=Qp*Dpinv*Qp.transpose();
         
-        MatrixXd U0 = Usub.colwise().sum().transpose();
-        MatrixXd Wmatrix= U0.transpose()* VPM *U0;
-        __W[i]=(Wmatrix)(0,0);
-        _rk[i]=rk;
-        
+        if(B==true && rMethod=="monte carlo") {
+           // VectorXd ZvecSub = subvector(Zvec,geneSet);
+            MatrixXd U0 = Usub.transpose()*Zvec;
+            MatrixXd Wmatrix= U0.transpose()* VPM *U0;
+            __W[i]=(Wmatrix)(0,0);
+            _rk[i]=rk;
+        }
+        else {
+            MatrixXd U0 = Usub.colwise().sum().transpose();
+            MatrixXd Wmatrix= U0.transpose()* VPM *U0;
+            __W[i]=(Wmatrix)(0,0);
+            _rk[i]=rk;
+        }
+ 
         if(pinvCheck) {
             _d0[i]=(V-Qp*Dp*Qp.transpose()).lpNorm<Infinity>(); 
             _d1[i]=(V*VPM*V-V).lpNorm<Infinity>(); 

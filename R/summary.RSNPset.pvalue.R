@@ -13,9 +13,9 @@ summary.RSNPset.pvalue <- function(object, sort="p", decreasing=FALSE, nrows=10,
         cat("\n")
         if(attr(object, 'B') > 0){
             if(attr(object, 'pval.transform')) {
-                cat("- Permutation p-values (pB, PB) come from comparison of\np-values across",attr(object, 'B'),"replications.\n")
+                cat("- Resampling p-values (pB, PB) come from comparison of\np-values across",attr(object, 'B'),"replications.\n")
             } else {
-                cat("- Permutation p-values (pB) come from comparison of\ntest statistics across",attr(object, 'B'),"replications.\n")
+                cat("- Resampling p-values (pB) come from comparison of\ntest statistics across",attr(object, 'B'),"replications.\n")
             }
         }
         cat("- Q-values based on",attr(object, 'K'),"SNP sets.\n")

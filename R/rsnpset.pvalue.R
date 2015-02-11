@@ -4,7 +4,7 @@ rsnpset.pvalue<-function(result, pval.transform=FALSE, qfun=function(x){qvalue(x
     m<-abs(result[[1]][,"m"])
     
     if (pval.transform==TRUE & attr(result, 'ret.rank')==FALSE){
-      message("\nNote: The ranks of the permutation variance matrices were not returned.  The degrees of freedom for the permutation p-values are based on the ranks of the observed variance matrices.\n")
+      message("\nNote: The ranks of the replication variance matrices were not returned.  The degrees of freedom for the replication p-values are based on the ranks of the observed variance matrices.\n")
     }
 
     p<-pchisq(W,rk,lower.tail=FALSE)

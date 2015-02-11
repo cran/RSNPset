@@ -18,6 +18,11 @@ event <- rbinom(n, 1, 0.9)
 quantile(time)
 table(event)
 
+## ----covars---------------------------------------------------------
+X <- matrix(c(rnorm(n), rbinom(n, 4, .25)), nrow=n)
+summary(X[,1])
+table(X[,2])
+
 ## ----snps-----------------------------------------------------------
 m <- 500
 
@@ -43,7 +48,8 @@ library(RSNPset)
 set.seed(456)
 
 ## ----ccstat---------------------------------------------------------
-ccres <- rsnpset(Y=status, G=G, snp.sets=geneSets, score="binomial", B=10, ret.rank=TRUE, v.permute=TRUE)
+ccres <- rsnpset(Y=status, G=G, snp.sets=geneSets, score="binomial", 
+                 B=10, r.method="permutation", ret.rank=TRUE, v.permute=TRUE)
 
 ## ----ccres1---------------------------------------------------------
 ccres[["Observed"]]
@@ -55,17 +61,18 @@ summary(ccres)
 rsnpset.pvalue(ccres, pval.transform=TRUE)
 
 ## ----ldlstat--------------------------------------------------------
-ldlres <- rsnpset(Y=LDL, G=G, snp.sets=geneSets, score="gaussian", B=10)
+ldlres <- rsnpset(Y=LDL, G=G, X=X, snp.sets=geneSets, score="gaussian", B=10)
 
 ## ----ldlres2--------------------------------------------------------
 ldlres[["Observed"]]
-ldlres[["Permutation.1"]]
+ldlres[["Replication.1"]]
 
 ## ----ldlpval--------------------------------------------------------
 rsnpset.pvalue(ldlres)
 
 ## ----ttestat--------------------------------------------------------
-tteres <- rsnpset(Y=time, delta=event, G=G, snp.sets=geneSets, score="cox", B=10, pinv.check=TRUE)
+tteres <- rsnpset(Y=time, delta=event, G=G, snp.sets=geneSets, score="cox", 
+                  B=10, r.method="permutation", pinv.check=TRUE)
 
 ## ----tteres1--------------------------------------------------------
 pinv.diag <- summary(tteres)
