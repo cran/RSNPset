@@ -19,7 +19,7 @@ rsnpset<-function(Y,delta=NULL,G,X=NULL,snp.sets,
       stop("delta should be 0 or 1")
     }
   }
-  delta<-as.numeric(delta)
+  delta<-as.numeric(delta) # always convert, for passing to rcpp
   
 	if(score!="gaussian" & !is.null(X)) {
 		stop('Covariates are only supported for score="gaussian"')

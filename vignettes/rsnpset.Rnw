@@ -26,7 +26,7 @@
 \newcommand{\bH}{\mathbb H}
 \newcommand{\bI}{\mathbb I}
 \newcommand{\bR}{\mathbb R}
-\newcommand{\kn}{k,n}
+\newcommand{\kn}{k}
 
 \newcommand{\Umatkn}{\bm{U}_{\kn}}
 \newcommand{\Uveckn}{\bm{U}_{\bullet \kn}}
@@ -34,6 +34,7 @@
 \newcommand{\Smatginv}{\bm{\Sigma}^{-}}
 \newcommand{\SmatPM}{\bm{\Sigma}^{+}}
 \newcommand{\SmatPMkn}{\bm{\Sigma}^{+}_{\kn}}
+\newcommand{\trans}{T}
 
 
 % <<setup1, include=FALSE>>=
@@ -73,6 +74,7 @@ Let the number of patients be denoted by $n$ (indexed by $i$), and the number of
 The complete set of genotypes for all patients forms the matrix $G$, where the genotype for SNP $j$ in patient $i$ is denoted by $G_{ij}$. 
 The vector of outcomes for all patients is denoted $Y$, where the outcome for patient $i$ is denoted by $Y_i$. 
 (Or, for right-censored endpoints, what is observed is $(Y_i,\Delta_i)$, where $Y_i$ is the event time and $\Delta_i\in\{0,1\}$ is the event indicator). 
+The model may also include $X$, an $n\times p$ matrix of covariates, where $\vec{X}_i$ is the vector of covariate values for patient~$i$.
 
 The marginal null hypothesis for SNP $j$ (that the variant is not associated with the outcome) is denoted by $H_j$. 
 This hypothesis is tested using an efficient score statistic whose numerator is of the form $\sum_{i=1}^n U_{ij}$, where $U_{ij}$ denotes the contribution of patient $i$ to the efficient score~\cite{tsiatis} statistic. 
@@ -82,15 +84,15 @@ Table \ref{tab:score} shows the specific equations for $U_{ij}$ for different ty
   \centering
   \begin{tabular}{|l|l|l|l|}\hline
   Outcome&Score&$U_{ij}$\\\hline
-  $Y_i\in\{0,1\}$&Binomial&$(G_{ij} - \bar{G_j})(Y_i - \bar{Y})$\\
-  $Y_i\in \bR$&Gaussian&$(G_{ij} - \bar{G_j})(Y_i - \bar{Y})(\frac{1}{n}\sum_{l=1}^n (Y_l - \bar{Y})^2)^{-1}$\\
+  $Y_i\in\{0,1\}$&Binomial&$(Y_i - \bar{Y})(G_{ij} - \bar{G_j})$\\
+  $Y_i\in \bR$&Gaussian&$(Y_i-\vec{X}_i \hat{\alpha})(G_{ij} - \vec{G}_j^{\trans} X (X^{\trans}X)^{-1} \vec{X}_i^{\trans})$\\
   $Y_i\in (0,\infty),\Delta_i\in\{0,1\}$&Cox&$\Delta_i (G_{ij} - a_j(i)b(i)^{-1})$\\  \hline
   \end{tabular}
 \caption{Summary of efficient score calculations. 
 Here $\bar{Y}=\frac{1}{n} \sum_{i=1}^n Y_i$ and $\bar{G}_j=\frac{1}{n}\sum_{i=1}^nG_{ij}$. 
-In calculating the Gaussian case, the MLE estimator of the variance, $\frac{1}{n}\sum_{i=1}^n (Y_i - \bar{Y})^2$, can be omitted. 
-For the Cox score, $a_j(i)=\sum_{l=1}^n \bI[Y_l \ge Y_i] G_{lj}$ and $b(i)=\sum_{l=1}^n \bI[Y_l \ge Y_i]$.
-The package also supports the efficient score for a Gaussian model that includes covariates (equation not shown).}
+For the Gaussian case, $\vec{G}_j$ is the vector of genotypes for SNP~$j$ for all patients, and $\hat{\alpha}$ is the MLE estimator for the coefficients of the covariates, estimated from a model without the genotypic component.
+Note that in the absence of covariates, the design matrix can be considered a vector of 1's and the Gaussian equation reduces to the binomial case.
+For the Cox score, $a_j(i)=\sum_{l=1}^n \bI[Y_l \ge Y_i] G_{lj}$ and $b(i)=\sum_{l=1}^n \bI[Y_l \ge Y_i]$.}
 \label{tab:score}
 \end{table}
 
@@ -118,6 +120,10 @@ No results are returned for SNP sets for which no SNPs are present or which incl
 If a SNP set contains column names that are not present in the argument \texttt{G}, the function executes without objection and returns a test statistic based on the subset of columns that \emph{are} present. 
 For this reason, the \texttt{summary.RSNPset()} function provides (in addition to other execution information) counts of the number of SNP sets dropped from the analysis and the number of SNP sets defined to include SNPs that are not present in the data, if any.  
 
+Unlike the Gaussian and bionomial score statistics, the Cox score statistic (\texttt{method = "cox"}) is not a sum of independent patient level scores, so some level of pruning of SNPs is recommended. 
+The permutation resampling facilities of the package can be utilized to assess the performance of the asymptotic inference. 
+The development of robust methods for calculating the Cox score statistics and approximating the covariance matrix is under way.
+
 \subsection{Options for \fctname{}}
 The following options imply specific assumptions about the model or data. It is important to confirm that these assumptions are valid when executing the analysis.
 \begin{description} \itemsep8pt \parskip0pt \parsep0pt
@@ -127,7 +133,7 @@ The following options imply specific assumptions about the model or data. It is 
   
   \item[\texttt{ret.rank}] - When using \texttt{r.method = "permutation"}, setting this option to \texttt{FALSE} reduces the size of the returned object by not returning ranks for the permutation replicates, under the assumption that the rank of $\Smatkn$ for SNP set $J_k$ is invariant under permutation. Ranks are returned only for the observed data.
   
-  \item[\texttt{pinv.check}] - The calculation of the efficient score relies on the Penrose-Moore inverse of the variance matrices. Setting this argument to \texttt{TRUE} generates a list of \texttt{B+1} matrices, each with one row per SNP set and five columns of diagnostic measures of the accuracy of this inverse. Departure of these values from zero indicates poor performance of the Penrose-Moore inverse. These diagnostics are returned as an attribute that can be accessed via the \texttt{summary()} function.
+  \item[\texttt{pinv.check}] - The calculation of the efficient score relies on the Penrose-Moore inverse of the variance matrices. Setting this argument to \texttt{TRUE} generates a list of \texttt{B+1} data frames, each with one row per SNP set and five columns of diagnostic measures of the accuracy of this inverse. Departure of these values from zero indicates poor performance of the Penrose-Moore inverse. These diagnostics are returned as an attribute that can be accessed via the \texttt{summary()} function.
 \end{description}
 
 
@@ -285,7 +291,7 @@ tteres <- rsnpset(Y=time, delta=event, G=G, snp.sets=geneSets, score="cox",
 
 By setting \texttt{pinv.check = TRUE}, the returned object now includes an attribute giving five diagnostic measures of the Penrose-Moore Inverse computed for each SNP set in all of the permutation replicates and the observed data. 
 These are accessed via the \texttt{summary()} function. 
-The list of $($\texttt{B}$+1)$ $K \times 5$ matrices can be captured for examination.
+The list of $($\texttt{B}$+1)$ $K \times 5$ data frames can be captured for examination.
 <<tteres1>>=
 pinv.diag <- summary(tteres)
 pinv.diag[["Observed"]]

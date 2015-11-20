@@ -2,16 +2,16 @@
 \alias{RSNPset-package}
 \alias{RSNPset}
 \docType{package}
-\title{Efficient Score Statistics For Genome-Wide SNP Set Analysis}
+\title{Efficient Score Statistics for Genome-Wide SNP Set Analysis}
 \description{
-    RSNPset is an implementation of the use of efficient score statistics in genome-wide SNP set analysis with complex traits. 
+    An implementation of three standard efficient score statistics (Cox, binomial, and Gaussian) for use in genome-wide SNP set analysis with complex traits. 
 }
 \details{
 \tabular{ll}{
 Package: \tab RSNPset\cr
 Type: \tab Package\cr
 Version: \tab 0.4\cr
-Date: \tab 2015-02-11\cr
+Date: \tab 2015-11-19\cr
 License: \tab GPL-3\cr
 }
 

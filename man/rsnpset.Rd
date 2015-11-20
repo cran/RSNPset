@@ -53,15 +53,17 @@ where \eqn{\bm{QDQ}}{QDQ} is the spectral decomposition of \eqn{\Sigma}{V}. Depa
 }
 
 \value{
-An S3 class \code{RSNPset} object consisting of a list of objects of class \code{Matrix}. The first matrix in the list describes the observed statistics, with \code{B} additional matrices corresponding to the requested resampling replicates. The rows of each matrix correspond to the elements of the \code{snp.sets} argument. The first column is \code{W}, the calculated efficient score for that set, and the second is \code{rank}, the rank of the variance matrix of the computed statistic. If \code{ret.rank=FALSE}, the ranks are not returned for the replicates. (They are assumed to be identical). The first matrix in the list also includes a third column, \code{m}, giving the number of SNPs analyzed in that SNP set.
+An S3 class \code{RSNPset} object consisting of a list of objects of class \code{data.frame}. The first data frame in the list describes the observed statistics, with \code{B} additional data frames corresponding to the requested resampling replicates. The rows of each data frame correspond to the elements of the \code{snp.sets} argument. The first column is \code{W}, the calculated efficient score for that set, and the second is \code{rank}, the rank of the variance matrix of the computed statistic. If \code{ret.rank=FALSE}, the ranks are not returned for the replicates. (They are assumed to be identical). The first data frame in the list also includes a third column, \code{m}, giving the number of SNPs analyzed in that SNP set.
 
-If \code{pinv.check=TRUE}, a list of \code{B+1} matrices, each with one row per SNP set and five columns of diagnostic measures of the calculated Penrose-Moore inverse (see above), is returned as an attribute. This and other attributes of the function's execution can be accessed using the class's \code{summary} function.
+If \code{pinv.check=TRUE}, a list of \code{B+1} data frames, each with one row per SNP set and five columns of diagnostic measures of the calculated Penrose-Moore inverse (see above), is returned as an attribute. This and other attributes of the function's execution can be accessed using the class's \code{summary} function.
 }
 
 \note{
     I. This function does not require that all entries of an element of \code{snp.sets} be present in the matrix \code{G}. If an element contains column names that are not present in \code{G}, the function will execute without objection and return a value based on the subset of columns that \emph{are} present.
     
     II. No statistics are returned for SNP sets which include SNPs with missing values (i.e. \code{NA}s in the selected columns of the matrix \code{G}).
+
+    III. As the Cox score statistic (\code{method="cox"}) is not a sum of independent patient level scores, some level of pruning of SNPs is recommended. The permutation resampling facilities of the package can be utilized to assess the performance of the asymptotic inference. The development of robust methods for calculating the score statistics and approximating the covariance matrix is under way.
 }
 
 \seealso{

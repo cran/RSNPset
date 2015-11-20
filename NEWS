@@ -1,3 +1,8 @@
+RSNPset v0.5 (Release date: 2015-11-05)
+============
+* Authors now recommend pruning SNPs when using the Cox score statistic (method=”cox”)
+* Documentation updates and corrections
+
 RSNPset v0.4 (Release date: 2015-02-11)
 ============
 * Addition of NEWS file
