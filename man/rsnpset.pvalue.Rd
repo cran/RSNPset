@@ -19,7 +19,7 @@ See below.
 }
 
 \value{
-An S3 class \code{RSNPset.pvalue} object that extends \code{data.frame}, with one row for each of the \code{K} SNP sets in \code{result}, columns \code{W, rank, m,} and two or more additional columns of p-values. Two columns, \code{p,} and \code{Q} are always returned. If \code{rsnpset()} was run with \code{B > 0}, the columns \code{pB} and \code{QB} are included as well. If \code{pval.transform=TRUE}, the returned p-value columns will be \code{p, pB, PB, Q,} and \code{QB}. 
+An S3 class \code{RSNPset.pvalue} object that extends \code{data.frame}, with one row for each of the \code{K} SNP sets in \code{result}, columns \code{W, rank, m,} and two or more additional columns of p-values. Two columns, \code{p,} and \code{q} are always returned. If \code{rsnpset()} was run with \code{B > 0}, the columns \code{pB} and \code{qB} are included as well. If \code{pval.transform=TRUE}, the returned p-value columns will be \code{p, pB, PB, q,} and \code{qB}. 
     
 \tabular{ll}{
 \bold{Column} \tab \bold{Definition} \cr
@@ -33,8 +33,8 @@ An S3 class \code{RSNPset.pvalue} object that extends \code{data.frame}, with on
 \code{p} \tab Asymptotic* \tab \code{pchisq(W,rank,lower.tail=FALSE)} \cr
 \code{pB} \tab Resampling** \tab See below. \cr
 \code{PB} \tab Family-wise error adjusted*** \tab See below. \cr
-\code{Q} \tab False discovery rate adjusted \tab \code{qfun(p)} \cr
-\code{QB} \tab Resampling FDR adjusted \tab \code{qfun(pB)} \cr 
+\code{q} \tab False discovery rate adjusted \tab \code{qfun(p)} \cr
+\code{qB} \tab Resampling FDR adjusted \tab \code{qfun(pB)} \cr 
 }
 
 \bold{*} For \code{W} and \code{rank} from \code{rsnpset()}.

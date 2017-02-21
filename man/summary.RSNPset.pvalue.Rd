@@ -11,7 +11,7 @@
 
 \arguments{
 	\item{object}{Result from \code{rsnpset.pvalue()}, an "RSNPset.pvalue" S3 class object. Required.}
-	\item{sort}{Character string indicating column by which to sort results. If not one of \code{c("W",} \code{"rank",} \code{"m",} \code{"p",} \code{"pB",} \code{"PB",} \code{"Q",} \code{"QB")} results will be sorted by the row names (i.e. the names of the SNP sets) instead. Default is \code{"p"}.}
+	\item{sort}{Character string indicating column by which to sort results. If not one of \code{c("W",} \code{"rank",} \code{"m",} \code{"p",} \code{"pB",} \code{"PB",} \code{"q",} \code{"qB")} results will be sorted by the row names (i.e. the names of the SNP sets) instead. Default is \code{"p"}.}
 	\item{decreasing}{Boolean indicating if the sort column should be arranged in decreasing order. Default is \code{FALSE}.}
 	\item{nrows}{Integer indicating number of rows to display. Default is 10.}
 	\item{dropcols}{Character vector corresponding names of columns of to be suppressed from the summary. Default is none.}

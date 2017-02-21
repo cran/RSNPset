@@ -94,8 +94,7 @@ rsnpset<-function(Y,delta=NULL,G,X=NULL,snp.sets,
   
   if(pinv.check==FALSE) {
     attr(result,"pinv.check")<-NA
-  }
-  else {
+  } else {
     attr(result,"pinv.check")<- lapply(result,function(x) x[,3:7])
   }
   
@@ -104,8 +103,7 @@ rsnpset<-function(Y,delta=NULL,G,X=NULL,snp.sets,
       
     if(ret.rank==FALSE && i>1) {
       result[[i]]<-result[[i]][,1,drop=FALSE]
-    }
-    else {
+    } else {
       result[[i]]<-result[[i]][,1:2]
     }
   }

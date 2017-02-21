@@ -8,13 +8,12 @@ rsnpset.pvalue<-function(result, pval.transform=FALSE, qfun=function(x){qvalue(x
     }
 
     p<-pchisq(W,rk,lower.tail=FALSE)
-    Q<-qfun(p )
+    q<-qfun(p )
 
     B<-attr(result, 'B')
     if(B==0) {
-        rpv<-data.frame(W,"rank"=rk,m,p,Q)
-    }
-    else {
+        rpv<-data.frame(W,"rank"=rk,m,p,q)
+    } else {
         k<-length(W)
         Wbk<-matrix(NA,k,B)
         for(i in 1:B) {
@@ -25,21 +24,19 @@ rsnpset.pvalue<-function(result, pval.transform=FALSE, qfun=function(x){qvalue(x
             for(i in 1:B) { 
                 rkbk[,i]<-result[[1+i]][,"rank"]
             }
-         }
-         else {
+        } else {
             for(i in 1:B) { 
                 rkbk[,i]<-result[[1]][,"rank"]
             }
-         }
+        }
         pB<-vector()
         if(pval.transform==FALSE) {
             pB<-rowSums(Wbk>=W)/B
             pB<-pmax(pB,1/B)		        
-            QB=qfun(pB)
+            qB=qfun(pB)
             
-            rpv<-data.frame(W,"rank"=rk,m,p,pB,Q,QB)
-        }
-        else {
+            rpv<-data.frame(W,"rank"=rk,m,p,pB,q,qB)
+        } else {
             xiWbkRbk<-pchisq(Wbk,rkbk,lower.tail=FALSE)
             pB<-rowSums(xiWbkRbk<p)/B
 
@@ -50,9 +47,9 @@ rsnpset.pvalue<-function(result, pval.transform=FALSE, qfun=function(x){qvalue(x
             pB<-pmax(pB,1/B)
             PB<-pmax(PB,1/B)       
             
-            QB=qfun(pB)
+            qB=qfun(pB)
 
-            rpv<-data.frame(W,"rank"=rk,m,p,pB,PB,Q,QB)
+            rpv<-data.frame(W,"rank"=rk,m,p,pB,PB,q,qB)
         }
     }
     rownames(rpv)<-rownames(result[[1]])

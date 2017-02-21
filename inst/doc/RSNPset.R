@@ -61,6 +61,7 @@ summary(ccres)
 rsnpset.pvalue(ccres, pval.transform=TRUE)
 
 ## ----ldlstat--------------------------------------------------------
+set.seed(789)
 ldlres <- rsnpset(Y=LDL, G=G, X=X, snp.sets=geneSets, score="gaussian", B=10)
 
 ## ----ldlres2--------------------------------------------------------
@@ -71,6 +72,7 @@ ldlres[["Replication.1"]]
 rsnpset.pvalue(ldlres)
 
 ## ----ttestat--------------------------------------------------------
+set.seed(1011)
 tteres <- rsnpset(Y=time, delta=event, G=G, snp.sets=geneSets, score="cox", 
                   B=10, r.method="permutation", pinv.check=TRUE)
 
@@ -88,6 +90,6 @@ ttepvals
 summary(ttepvals, verbose=TRUE)
 
 ## ----ttepvalsum2----------------------------------------------------
-ttesum <- summary(ttepvals, sort="pB", nrows=5, dropcols=c("m","Q","QB"))
+ttesum <- summary(ttepvals, sort="pB", nrows=5, dropcols=c("m","q","qB"))
 ttesum
 

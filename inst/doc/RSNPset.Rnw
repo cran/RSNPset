@@ -259,7 +259,7 @@ Since we have the ranks for the permutation replicates, we set \texttt{pval.tran
 rsnpset.pvalue(ccres, pval.transform=TRUE)
 @
 As explained above, setting \texttt{pval.transform = TRUE} means the function compares asymptotic p-values across permutations, instead of raw statistics, in computing the resampling p-values (\texttt{pB}). 
-Having computed these p-values, the function also returns family-wise error adjusted p-values (\texttt{PB}), in addition to the asymptotic (\texttt{p}) and FDR adjusted p-values (\texttt{Q} and \texttt{QB}). 
+Having computed these p-values, the function also returns family-wise error adjusted p-values (\texttt{PB}), in addition to the asymptotic (\texttt{p}) and FDR adjusted p-values (\texttt{q} and \texttt{qB}). 
 As expected, since the data are simulated, we find no significant association between any SNP sets and the outcome. 
 %(Recall that the asymptotic p-value for \textit{XYZ4} is not significant under multiple testing).
 
@@ -268,6 +268,7 @@ Here we revert to the default values for the arguments \texttt{ret.rank} and \te
 In practice, when used on a much larger set of data, these changes offer the potential for a significant reduction in both the processing time and the size of the returned object. 
 The default \texttt{r.method}, Monte Carlo resampling, allows us to include covariates in our model.
 <<ldlstat>>=
+set.seed(789)
 ldlres <- rsnpset(Y=LDL, G=G, X=X, snp.sets=geneSets, score="gaussian", B=10)
 @
 
@@ -285,6 +286,7 @@ Again, these resampling p-values (\texttt{pBk}) are computed using identical cov
 
 Lastly, we look at our right-censored (time to event) phenotype. 
 <<ttestat>>=
+set.seed(1011)
 tteres <- rsnpset(Y=time, delta=event, G=G, snp.sets=geneSets, score="cox", 
                   B=10, r.method="permutation", pinv.check=TRUE)
 @
@@ -313,7 +315,7 @@ summary(ttepvals, verbose=TRUE)
 As a typical GWAS study may span thousands of SNPs and SNP sets, \texttt{summary()} allows for the succinct listing of p-values for the most significant results. 
 The returned data frame can be saved for future reference or reporting.
 <<ttepvalsum2>>=
-ttesum <- summary(ttepvals, sort="pB", nrows=5, dropcols=c("m","Q","QB"))
+ttesum <- summary(ttepvals, sort="pB", nrows=5, dropcols=c("m","q","qB"))
 ttesum
 @
 

@@ -1,3 +1,12 @@
+RSNPset v0.5.2 (Release date: 2017-02-20)
+============
+* Minor bug fix for note about registering native routines under r-devel
+
+RSNPset v0.5.1 (Release date: 2017-02-16)
+============
+* Minor bug fix for warnings in vingette under r-devel
+* Changed names of two returned columns in rsnpset.pvalue() (and associated documentation) for consistency
+
 RSNPset v0.5 (Release date: 2015-11-05)
 ============
 * Authors now recommend pruning SNPs when using the Cox score statistic (method=”cox”)

@@ -10,8 +10,8 @@
 \tabular{ll}{
 Package: \tab RSNPset\cr
 Type: \tab Package\cr
-Version: \tab 0.4\cr
-Date: \tab 2015-11-19\cr
+Version: \tab 0.5.2\cr
+Date: \tab 2017-02-20\cr
 License: \tab GPL-3\cr
 }
 
