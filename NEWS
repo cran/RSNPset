@@ -1,3 +1,7 @@
+RSNPset v0.5.3 (Release date: 2017-12-11)
+============
+* Minor bug fix for example code in function documentation
+
 RSNPset v0.5.2 (Release date: 2017-02-20)
 ============
 * Minor bug fix for note about registering native routines under r-devel

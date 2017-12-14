@@ -10,8 +10,8 @@
 \tabular{ll}{
 Package: \tab RSNPset\cr
 Type: \tab Package\cr
-Version: \tab 0.5.2\cr
-Date: \tab 2017-02-20\cr
+Version: \tab 0.5.3\cr
+Date: \tab 2017-12-11\cr
 License: \tab GPL-3\cr
 }
 
@@ -55,7 +55,7 @@ event <- rbinom(n, 1, 0.9)      # Event indicator
 res <- rsnpset(Y=time, delta=event, G=G, snp.sets=gsets, score="cox")
 head(res)
 summary(res)
-rsnpset.pvalue(res)
+rsnpset.pvalue(res, qfun=function(x) NA) # q-values suppressed for small sample size (K = 10)
 
 \dontrun{
 # Optional parallel backend

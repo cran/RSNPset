@@ -58,7 +58,8 @@ ccres[["Observed"]]
 summary(ccres)
 
 ## ----ccpval---------------------------------------------------------
-rsnpset.pvalue(ccres, pval.transform=TRUE)
+bhqfun <- function(x){qvalue::qvalue(x, fdr.level=0.05, lambda=0)$qvalue}
+rsnpset.pvalue(ccres, pval.transform=TRUE, qfun=bhqfun)
 
 ## ----ldlstat--------------------------------------------------------
 set.seed(789)
@@ -69,7 +70,7 @@ ldlres[["Observed"]]
 ldlres[["Replication.1"]]
 
 ## ----ldlpval--------------------------------------------------------
-rsnpset.pvalue(ldlres)
+rsnpset.pvalue(ldlres, qfun=bhqfun)
 
 ## ----ttestat--------------------------------------------------------
 set.seed(1011)
@@ -83,7 +84,7 @@ pinv.diag[["Observed"]]
 unlist(lapply(pinv.diag, max))
 
 ## ----ttepval--------------------------------------------------------
-ttepvals <- rsnpset.pvalue(tteres)
+ttepvals <- rsnpset.pvalue(tteres, qfun=bhqfun)
 ttepvals
 
 ## ----ttepvalsum1----------------------------------------------------

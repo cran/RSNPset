@@ -1,8 +1,8 @@
 Package: RSNPset
 Type: Package
 Title: Efficient Score Statistics for Genome-Wide SNP Set Analysis
-Version: 0.5.2
-Date: 2017-02-20
+Version: 0.5.3
+Date: 2017-12-11
 Author: Chanhee Yi, Alexander Sibley, and Kouros Owzar
 Maintainer: Alexander Sibley <alexander.sibley@dm.duke.edu>
 Description: An implementation of the use of efficient score statistics
@@ -18,6 +18,6 @@ LinkingTo: Rcpp, RcppEigen
 Suggests: knitr
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2017-02-20 21:56:29 UTC; abs33
+Packaged: 2017-12-14 18:48:13 UTC; abs33
 Repository: CRAN
-Date/Publication: 2017-02-21 16:46:20
+Date/Publication: 2017-12-14 19:55:23 UTC

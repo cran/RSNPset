@@ -256,10 +256,12 @@ summary(ccres)
 We use \pfctname{} to check for evidence for rejecting our null hypotheses. 
 Since we have the ranks for the permutation replicates, we set \texttt{pval.transform = TRUE} to ensure the results across permutations are comparable.
 <<ccpval>>=
-rsnpset.pvalue(ccres, pval.transform=TRUE)
+bhqfun <- function(x){qvalue::qvalue(x, fdr.level=0.05, lambda=0)$qvalue}
+rsnpset.pvalue(ccres, pval.transform=TRUE, qfun=bhqfun)
 @
 As explained above, setting \texttt{pval.transform = TRUE} means the function compares asymptotic p-values across permutations, instead of raw statistics, in computing the resampling p-values (\texttt{pB}). 
 Having computed these p-values, the function also returns family-wise error adjusted p-values (\texttt{PB}), in addition to the asymptotic (\texttt{p}) and FDR adjusted p-values (\texttt{q} and \texttt{qB}). 
+We have also used the \texttt{qfun} argument to set our own function for computing FDR adjusted p-values (in this case the Benjamini-Hochberg procedure).
 As expected, since the data are simulated, we find no significant association between any SNP sets and the outcome. 
 %(Recall that the asymptotic p-value for \textit{XYZ4} is not significant under multiple testing).
 
@@ -280,7 +282,7 @@ ldlres[["Replication.1"]]
 Here the statistics of the Monte Carlo replicates have the same degrees of freedom as the observed statistics.
 
 <<ldlpval>>=
-rsnpset.pvalue(ldlres)
+rsnpset.pvalue(ldlres, qfun=bhqfun)
 @
 Again, these resampling p-values (\texttt{pBk}) are computed using identical covariance matrices, so the observed and replication statistics are directly comparable.
 
@@ -302,7 +304,7 @@ unlist(lapply(pinv.diag, max))
 @ 
 The diagnostic measures are all close to zero, indicating the Penrose-Moore Inverses are performing well, so we proceed to examining the p-values.
 <<ttepval>>=
-ttepvals <- rsnpset.pvalue(tteres)
+ttepvals <- rsnpset.pvalue(tteres, qfun=bhqfun)
 ttepvals
 @
 
